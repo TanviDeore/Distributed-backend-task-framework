@@ -24,7 +24,6 @@ import com.api.apiservice.service.TaskServiceImpl;
 @RequestMapping("/tasks")
 @CrossOrigin("*")
 public class TaskController {
-	private static final Logger logger = LogManager.getLogger(TaskController.class);
 	
 	@Autowired
 	TaskService taskService;
@@ -35,7 +34,6 @@ public class TaskController {
 			Task st  = taskService.saveOrUpdateTheTask(task);
 			return new ResponseEntity<>(st, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.error("Exception while adding task", e);
 			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 		}
 	}
