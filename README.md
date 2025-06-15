@@ -11,6 +11,12 @@ This project implements a cloud-native, event-driven backend system capable of a
   - Polls tasks from Amazon SQS.
   - Processes input image (e.g., grayscale conversion) and stores the result in Amazon S3.
   - Updates task state in DynamoDB.
+  
+  
+    ![AWS (2)](https://github.com/user-attachments/assets/2f92d63a-8d79-4f65-ba3e-34914871d772)
+
+ 
+    
 
 ## Technologies Used
 - **Languages & Frameworks:** Java 17, Spring Boot 3.x, Jackson, Lombok, Apache Log4j2
