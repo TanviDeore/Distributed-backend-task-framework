@@ -38,7 +38,7 @@ public class TaskWorkerServiceImpl implements TaskWorkerService {
 
 	private final SqsClient sqsClient;
     private final S3Client s3Client;
-    private final TaskUpdateDao taskUpdateDao; // Use your TaskDao or TaskUpdateDao interface
+    private final TaskUpdateDao taskUpdateDao; 
     private final ObjectMapper objectMapper;
     private final String taskQueueUrl;
     private final String outputBucketName;
@@ -62,7 +62,7 @@ public class TaskWorkerServiceImpl implements TaskWorkerService {
 	public void pollAndProcessTasks() {
     	ReceiveMessageRequest receiveMessageRequest = ReceiveMessageRequest.builder()
                 .queueUrl(taskQueueUrl)
-                .maxNumberOfMessages(1) // Fetch 1 message at a time
+                .maxNumberOfMessages(1) // Fetching 1 message at a time
                 .waitTimeSeconds(20)    
                 .build();
 
@@ -83,11 +83,11 @@ public class TaskWorkerServiceImpl implements TaskWorkerService {
 	public void processMessage(Message message){
 		Task task  = null;
 		try {
-            // 1. Deserialize the message body into a Task object
+            //Deserializing the message body into a Task object
             task = objectMapper.readValue(message.body(), Task.class);
             logger.info("INFO: Starting processing for taskId: {} (Receipt Handle: {})", task.getTaskId(), message.receiptHandle());
 
-            // 2. Update task status to RUNNING in DynamoDB
+            //Updating task status to RUNNING in DynamoDB
             taskUpdateDao.updateTaskStatus(task.getTaskId(), Status.RUNNING, null, null);
             logger.info("INFO: Task {} status updated to RUNNING in DynamoDB.", task.getTaskId());
 
@@ -95,32 +95,30 @@ public class TaskWorkerServiceImpl implements TaskWorkerService {
             Optional<Task> existingTaskOptional = taskUpdateDao.retriveTaskById(task.getTaskId());
             if (existingTaskOptional.isPresent() && existingTaskOptional.get().getStatus() == Status.COMPLETED) {
                 logger.warn("WARN: Task {} already COMPLETED. Skipping reprocessing.", task.getTaskId());
-                deleteMessageFromSqs(message);
                 return;
             }
             
 
-            // Download the input image
+            // Downloading the input image
             BufferedImage originalImage = downloadImage(task.getInputImageUrl(), task.getTaskId());
             logger.info("INFO: Image downloaded for taskId: {}", task.getTaskId());
 
-            // Perform image transformation (grayscale)
+            // Performing image transformation (grayscale)
             BufferedImage grayImage = convertToGrayscale(originalImage);
             logger.info("INFO: Image transformed to grayscale for taskId: {}", task.getTaskId());
 
-            // Store processed image in S3
-            // Determine the output S3 key (e.g., "processed-images/{taskId}.png")
+            // Storing processed image in S3
             String outputS3Key = "processed-images/" + task.getTaskId() + ".png"; 
             String outputS3Url = String.format("https://%s.s3.%s.amazonaws.com/%s", outputBucketName, awsRegion, outputS3Key);
 
             uploadImageToS3(grayImage, outputS3Key);
             logger.info("INFO: Processed image uploaded to S3: {}", outputS3Url);
 
-            // Update task status to COMPLETED in DynamoDB, including output URL
+            // Updating task status to COMPLETED in DynamoDB, including output URL
             taskUpdateDao.updateTaskStatus(task.getTaskId(), Status.COMPLETED, outputS3Url, null);
             logger.info("INFO: Task {} status updated to COMPLETED in DynamoDB. Output URL: {}", task.getTaskId(), outputS3Url);
 
-            //. Delete the message from SQS ONLY if all steps above succeed
+            // Deleting the message from SQS ONLY if all steps above succeed
             deleteMessageFromSqs(message);
             logger.info("INFO: SQS message deleted for taskId: {}", task.getTaskId());
 
@@ -137,7 +135,6 @@ public class TaskWorkerServiceImpl implements TaskWorkerService {
             }
             
         } catch (RuntimeException e) {
-            // Catch any other unexpected runtime errors (e.g., from DAO, or other uncaught exceptions)
             logger.error("ERROR: Runtime error processing task ID: {}: {}. Message will be returned to queue.", task != null ? task.getTaskId() : "Unknown", e.getMessage(), e);
             deleteMessageFromSqs(message);
             if (task != null) {
