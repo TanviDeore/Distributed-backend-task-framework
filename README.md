@@ -6,7 +6,7 @@ This project implements a cloud-native, event-driven backend system capable of a
 ## Architecture
 - **API Service (Spring Boot 3.x, Java 17):**
   - Exposes REST endpoints for submitting tasks (`POST /tasks`) and retrieving task status (`GET /tasks/{taskId}`).
-  - Immediately returns HTTP 202 (Accepted) upon task submission to enable non-blocking processing.
+  - Immediately returns HTTP 201 (Created) upon task submission to enable non-blocking processing.
 - **Worker Service:**
   - Polls tasks from Amazon SQS.
   - Processes input image (e.g., grayscale conversion) and stores the result in Amazon S3.
