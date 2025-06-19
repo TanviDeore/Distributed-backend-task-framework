@@ -54,7 +54,7 @@ Task Status Update to FAILED: Upon any processing error, the task's status in Dy
 - Idempotency: Worker logic is designed to tolerate reprocessing the same message multiple times (e.g., by checking DynamoDB status before major work, S3 uploads overwriting).
 
 ## Improvements & Future Work
-- Docker containerization for API and Worker services.
+- Docker containerization for API and Worker services. ✅ Completed
 - Deployment using Amazon ECS (Fargate or EC2).
 - Load balancing via AWS ALB.
 - Auto-scaling configuration for worker fleets.
