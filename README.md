@@ -9,7 +9,7 @@ This project implements a cloud-native, event-driven backend system capable of a
   - Immediately returns HTTP 201 (Created) upon task submission to enable non-blocking processing.
 - **Worker Service:**
   - Polls tasks from Amazon SQS.
-  - Processes input image (e.g., grayscale conversion) and stores the result in Amazon S3.
+  - Processes input image (grayscale conversion) and stores the result in Amazon S3.
   - Updates task state in DynamoDB.
   
   
