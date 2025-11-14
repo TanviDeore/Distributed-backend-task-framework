@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.5.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.api</groupId>
 	<artifactId>api-service</artifactId>
@@ -69,6 +69,18 @@
     		<groupId>software.amazon.awssdk</groupId>
     		<artifactId>sqs</artifactId>
     	</dependency>
+    	<dependency>
+    <groupId>software.amazon.awssdk</groupId>
+    <artifactId>cloudwatch</artifactId>
+</dependency>
+    	
+    	
+<!-- https://mvnrepository.com/artifact/com.kdgregory.logging/log4j2-aws-appenders -->
+<dependency>
+    <groupId>com.kdgregory.logging</groupId>
+    <artifactId>log4j2-aws-appenders</artifactId>
+    <version>3.2.0</version>
+</dependency>
     
 	</dependencies>
 
