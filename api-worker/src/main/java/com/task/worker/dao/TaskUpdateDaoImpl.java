@@ -67,9 +67,9 @@ public class TaskUpdateDaoImpl implements TaskUpdateDao{
                     .action(AttributeAction.PUT)
                     .build());
         } else if (newStatus != Status.COMPLETED) {
-            // Ensure outputImageUrl is removed or set to null if status is not COMPLETED
+            //  outputImageUrl is removed or set to null if status is not COMPLETED
             updates.put("outputImageUrl", AttributeValueUpdate.builder()
-                    .action(AttributeAction.DELETE) // Or PUT with null string, but DELETE is cleaner
+                    .action(AttributeAction.DELETE)
                     .build());
         }
 
@@ -80,7 +80,7 @@ public class TaskUpdateDaoImpl implements TaskUpdateDao{
                     .action(AttributeAction.PUT)
                     .build());
         } else if (newStatus != Status.FAILED) {
-            // Ensure failureReason is removed or set to null if status is not FAILED
+            // failureReason is removed or set to null if status is not FAILED
             updates.put("failureReason", AttributeValueUpdate.builder()
                     .action(AttributeAction.DELETE)
                     .build());
@@ -89,7 +89,7 @@ public class TaskUpdateDaoImpl implements TaskUpdateDao{
 
         UpdateItemRequest request = UpdateItemRequest.builder()
                 .tableName(tableName)
-                .key(Map.of("taskId", AttributeValue.builder().s(taskId).build())) // Your primary key
+                .key(Map.of("taskId", AttributeValue.builder().s(taskId).build())) // primary key
                 .attributeUpdates(updates)
                 .build();
 
