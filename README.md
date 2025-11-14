@@ -41,7 +41,7 @@ This project implements a cloud-native, event-driven backend system capable of a
 ## Error Handling
 **API Service (Task Submission):**
 
-- Input Validation: Ensures incoming task requests (e.g., inputImageUrl) are valid before processing.
+- Input: Take input from the user.
 - Graceful Queueing: Persists initial task status to DynamoDB before sending to SQS. If SQS send fails, the task state is still recorded, preventing lost tasks (though it would require manual re-queueing or a reconciliation process).
 - Immediate Client Feedback: Returns 202 Accepted status immediately, even if background processing might eventually fail, ensuring the client isn't blocked.
 
